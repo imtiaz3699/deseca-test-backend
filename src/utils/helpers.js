@@ -11,5 +11,5 @@ export const apiSuccessResponse = async (
   message = "Success",
   data
 ) => {
-  return res.status(200).json({ message: message, data: data });
+  return res.status(200).json({ message: message, data: data,status:200 });
 };
