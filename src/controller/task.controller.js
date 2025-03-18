@@ -1,10 +1,13 @@
 import Task from "../model/task.model.js";
-import { apiErrorHandler } from "../utils/helpers.js";
+import { apiErrorHandler,apiSuccessResponse } from "../utils/helpers.js";
 
 export const addTask = async (req, res) => {
-  const { title, description, status, assignedTo, createdBy } = req.body;
+  const { title, description, status, assignedTo, createdBy,assignedBy } = req.body;
   if (!title) {
     return apiErrorHandler(res, 400, "Please enter title");
+  }
+  if(!createdBy) {
+    return apiErrorHandler(res, 400, "Please enter createdBy");
   }
   try {
     const newTask = new Task({
@@ -12,6 +15,7 @@ export const addTask = async (req, res) => {
       description,
       status,
       assignedTo,
+      assignedBy,
       createdBy,
     });
     await newTask.save();
@@ -25,7 +29,7 @@ export const addTask = async (req, res) => {
 export const getTasks = async (req, res) => {
   try {
     const tasks = await Task.find()
-      .populate("assignedTo createdBy", "name email")
+      .populate("assignedTo createdBy assignedBy", "name email")
       .select("-password");
     return apiSuccessResponse(res, "Tasks fetched successfully", tasks);
   } catch (e) {

@@ -1,12 +1,12 @@
 import express from 'express';
-import { addTask,updateTask,getTasks } from '../controller/task.controller.js';
-import { deleteTask } from '../controller/admin.controller.js';
+import { addTask,updateTask,getTasks,deleteTask } from '../controller/task.controller.js';
+// import { deleteTask } from '../controller/admin.controller.js';
 
 const router = express.Router();
 
 router.post('/add-task', addTask);
-router.post('/update-task/:id', updateTask);
-router.post('/get-tasks', getTasks);
-router.post('/delete-tasks/:id', deleteTask);
+router.put('/update-task/:id', updateTask);
+router.get('/get-tasks', getTasks);
+router.delete('/delete-tasks/:id', deleteTask);
 
 export default router;

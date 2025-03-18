@@ -90,7 +90,7 @@ export const deleteUser = async (req, res) => {
 };
 
 export const deleteTask = async (req, res) => {
-  const { taskId } = req.params;
+  const  taskId = req.params.taskId;
   try {
     const deletedTask = await Task.findByIdAndDelete(taskId);
     if (!deletedTask) return apiErrorHandler(res, 404, "Task not found");
