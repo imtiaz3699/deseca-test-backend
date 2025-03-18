@@ -8,7 +8,7 @@ export const apiErrorHandler = async (
 
 export const apiSuccessResponse = async (
   res,
-  message = "Server error.",
+  message = "Success",
   data
 ) => {
   return res.status(200).json({ message: message, data: data });
