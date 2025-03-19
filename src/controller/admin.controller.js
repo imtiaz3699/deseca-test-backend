@@ -3,7 +3,7 @@ import { apiErrorHandler, apiSuccessResponse } from "../utils/helpers.js";
 import bcrypt from "bcryptjs";
 
 export const addUser = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role,createdBy } = req.body;
   if (!name || !email || !password)
     return apiErrorHandler(res, 400, "Please enter all fields");
 
@@ -11,7 +11,7 @@ export const addUser = async (req, res) => {
     return apiErrorHandler(res, 400, "Invalid role");
   }
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = new User({ name, email, password: hashedPassword, role });
+  const newUser = new User({ name, email, password: hashedPassword, role,createdBy });
   try {
     const userExists = await User.findOne({ email });
     if (userExists) return apiErrorHandler(res, 400, "User already exists");
@@ -47,8 +47,17 @@ export const assignManager = async (req, res) => {
 };
 
 export const getAllUsers = async (req, res) => {
+  console.log(req.user.id,"faldsjhflakjds")
+  const obj ={}
+  if(req.user.role === 'manager'){
+    obj.managerId = req.user.id
+  }
+  if(req.user.role === 'admin'){
+    obj.createdBy = req.user.id
+  }
+  console.log(obj,req.user.role,'checkobj')
   try {
-    const users = await User.find()
+    const users = await User.find(obj)
       .populate("managerId", "name email")
       .select("-password");
     return apiSuccessResponse(res, "Users fetched successfully", users);
@@ -82,7 +91,7 @@ export const deleteUser = async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(userId);
     if (!deletedUser) return apiErrorHandler(res, 404, "User not found");
-    return apiSuccessResponse(res, "User deleted successfully",);
+    return apiSuccessResponse(res, "User deleted successfully");
   } catch (err) {
     console.log(err);
     return apiErrorHandler(res, 500, `Internal server error:${err.message}`);
@@ -90,7 +99,7 @@ export const deleteUser = async (req, res) => {
 };
 
 export const deleteTask = async (req, res) => {
-  const  taskId = req.params.taskId;
+  const taskId = req.params.taskId;
   try {
     const deletedTask = await Task.findByIdAndDelete(taskId);
     if (!deletedTask) return apiErrorHandler(res, 404, "Task not found");

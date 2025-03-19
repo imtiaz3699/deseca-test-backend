@@ -9,6 +9,7 @@ const TaskSchema = new mongoose.Schema(
       enum: ["pending", "in-progress", "completed"],
       default: "pending",
     },
+    due_date:{type:Date,required:true},
     assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     assignedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
