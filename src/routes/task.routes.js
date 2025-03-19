@@ -1,8 +1,6 @@
 import express from 'express';
 import { addTask,updateTask,getTasks,deleteTask } from '../controller/task.controller.js';
 import { verifyToken } from '../middleware/middleware.js';
-// import { deleteTask } from '../controller/admin.controller.js';
-
 const router = express.Router();
 
 router.post('/add-task', verifyToken, addTask);
